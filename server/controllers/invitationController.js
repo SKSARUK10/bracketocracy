@@ -4,78 +4,86 @@ const User = require('../model/userSchema');
 
 class InvitationController {
     static addinvitation = async (req, res) => {
-    //     try {
-    //         const { email } = req.body;
-    //         const { id: leagueId } = req.params; // Assuming leagueId is in params
+        try {
+            const { email } = req.body;
+            console.log(email);
+            const {leagueId } = req.params; // Assuming leagueId is in params
+            const league = await League.findById(leagueId);
+            console.log(league);
+            if (!league) {
+                return res.status(404).json({ message: 'League not found.' });
+            }
  
-    //         const user = await User.findOne({ email: req.body.email });
-    //         if (!user) {
-    //             return res.status(404).json({ message: 'No user found with this email.' });
-    //         }
+            const user = await User.findOne({ email: req.body.email });
+            if (!user) {
+                return res.status(404).json({ message: 'No user found with this email.' });
+            }
 
-    //         // Create an invitation
-    //         const invitation = new Invite({
-    //             email,
-    //             userId: user.id,
-    //             invitedBy: req.user.id, 
-    //             leagueId,
+            // Create an invitation
+            const invitation = new Invite({
+                email,
+                userId:user.id,
+                invitedBy:league.userId[0], 
+                leagueId,
               
-    //         });
+            });
 
-    //         // Save the invitation
-    //         const savedInvitation = await invitation.save();
+            // Save the invitation
+            const savedInvitation = await invitation.save();
+            if (!Array.isArray(league.userId)) {
+              league.userId = [];
+          }
 
-            // // Update the league with the invited user
-            // const league = await League.findById(leagueId);
-            // if (!league) {
-            //     return res.status(404).json({ message: 'League not found.' });
-            // }
+            
 
             // // Add the userId to league's userId array
-            // league.userId.push(user.id);
+             
+            league.userId.push(user.id);
 
-            // // Save the league
-            // await league.save();
+            // Save the league
+            await league.save();
 
-    //         res.status(200).json({
-    //             message: 'Invitation added successfully.',
-    //             invitationData: savedInvitation,
-    //             leagueData: league
-    //         });
-    //     } catch (err) {
-    //         console.error(err.message);
-    //         res.status(500).json({ message:err.message });
-    //     }
-    // }
+            
 
-try{
-    const league = await League.findById(req.params.id);
-    const  user = await User.findOne({email:req.body.email});
-    if(!user)
-    {
-        res.status(404).json({message:"user not find"});
+            res.status(200).json({
+                message: 'Invitation added successfully.',
+                invitationData: savedInvitation,
+                leagueData: league
+            });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ message:err.message });
+        }
     }
-    const invitation = new Invite({
-        email: req.body.email,
-        userId: req.body.userId,
-        invitedBy: req.body.invitedBy, // Assuming req.user is the authenticated user
-        leagueId: league.id
-        // status: 0 // Pending invitation
-      });
-  const  result=   await invitation.save();
-res.status(200).json({message:"sucessfully invitation done",info:result});
+
+// try{
+//     const league = await League.findById(req.params.id);
+//     const  user = await User.findOne({email:req.body.email});
+//     if(!user)
+//     {
+//         res.status(404).json({message:"user not find"});
+//     }
+//     const invitation = new Invite({
+//         email: req.body.email,
+//         userId: req.body.userId,
+//         invitedBy: req.body.invitedBy, // Assuming req.user is the authenticated user
+//         leagueId: league.id
+//         // status: 0 // Pending invitation
+//       });
+//   const  result=   await invitation.save();
+// res.status(200).json({message:"sucessfully invitation done",info:result});
 
     
     
 
-}catch(err)
-{ 
-    console.log(err);
-    res.status(500).json({message:err.message});
-}
+// }catch(err)
+// { 
+//     console.log(err);
+//     res.status(500).json({message:err.message});
+// }
 
 
-    }
+    
 
 static showall = async(req,res)=>{
     try{

@@ -3,7 +3,7 @@ const { addinvitation, showall, deleteinvite, searchleague } = require("../contr
 
 const Router = express.Router();
 
-Router.post("/:id/invite", addinvitation); // added by league id 
+Router.post("/invite/:leagueId", addinvitation); // added by league id 
 Router.get("/view", showall);
 Router.delete("/delete/:id", deleteinvite);
 Router.get("/viewby/:id", searchleague); // search by league if
