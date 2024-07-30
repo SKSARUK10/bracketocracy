@@ -19,9 +19,9 @@ class LeagueController {
 
       const league = new League({ title, description, userId });
       const data = await league.save();
-      res.status(200).json({ message: "league created successfull", info: data });
+      res.status(201).json({ message: "league created successfull", info: data });
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
 
   }
@@ -29,9 +29,9 @@ class LeagueController {
   static viewall = async (req, res) => {
     try {
       const data = await League.find();
-      res.status(200).json({ message: "view successful", info: data });
+      res.status(201).json({ message: "view successful", info: data });
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
   };
   // search league by id
@@ -39,9 +39,9 @@ class LeagueController {
     try {
       let leagueid = req.params.id;
       const result = await League.findById(leagueid);
-      res.status(200).json({ data: result });
+      res.status(201).json({ data: result });
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
   };
   // delete a league by id
@@ -50,10 +50,10 @@ class LeagueController {
       const data = req.params.id;
       const result = await League.findByIdAndDelete(data);
       res
-        .status(200)
+        .status(201)
         .json({ message: "league deleted successfully", info: result });
     } catch (err) {
-      res.status(404).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
   };
   // update a league by id 
@@ -88,7 +88,7 @@ class LeagueController {
         return;
       }
 
-      res.status(200).json({ message: 'Update done successfully', info: updatedLeague });
+      res.status(201).json({ message: 'Update done successfully', info: updatedLeague });
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
