@@ -5,15 +5,16 @@ const messageSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "leagues",
   },
-  userId: {
+  userId: [{
     type: mongoose.Schema.Types.ObjectId,  // users id present in the league
     ref: "leagues",
-  },
+  }],
   message: {
     type: String,
   },
   status: {
     type: Number,
+    default:true,
   },
   created: {
     type: Date,
