@@ -101,77 +101,33 @@ exports.createMatch = async (req, res) => {
   }
 };
 
-// Get a single match by ID
-// exports.getMatchById = async (req, res) => {
-//   try {
-//     const match = await Match.findById(req.params.id)
-//       .populate("teamOneId")
-//       .populate("teamTwoId")
-//       .populate("decidedWinner")
-//       .populate("seasonId")
-//       .populate("roundId")
-//       .populate("zoneId");
-//     if (!match) {
-//       return res.status(404).json({ message: "Match not found" });
-//     }
-//     res.status(200).json(match);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+//Get a single match by ID
+exports.getMatchById = async (req, res) => {
+  try {
+    const match = await Match.findById(req.params.id)
+      .populate("teamOneId")
+      .populate("teamTwoId")
+      .populate("decidedWinner")
+      .populate("seasonId");
 
-// Update a match by ID
-// exports.updateMatch = async (req, res) => {
-//   try {
-//     const match = await Match.findById(req.params.id);
-//     if (!match) {
-//       return res.status(404).json({ message: "Match not found" });
-//     }
-
-//     const { teamOneId, teamTwoId, decidedWinner, roundId, zoneId, seasonId } =
-//       req.body;
-
-//     // Validate updated data
-//     if (teamOneId && !(await Team.findById(teamOneId))) {
-//       return res.status(404).json({ message: "Team One not found" });
-//     }
-
-//     if (teamTwoId && !(await Team.findById(teamTwoId))) {
-//       return res.status(404).json({ message: "Team Two not found" });
-//     }
-
-//     if (seasonId && !(await Season.findById(seasonId))) {
-//       return res.status(404).json({ message: "Season not found" });
-//     }
-
-//     if (roundId && !(await Round.findById(roundId))) {
-//       return res.status(404).json({ message: "Round not found" });
-//     }
-
-//     if (zoneId && !(await Zone.findById(zoneId))) {
-//       return res.status(404).json({ message: "Zone not found" });
-//     }
-
-//     const updatedMatch = await Match.findByIdAndUpdate(
-//       req.params.id,
-//       req.body,
-//       { new: true }
-//     );
-//     res.status(200).json(updatedMatch);
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
+    if (!match) {
+      return res.status(404).json({ message: "Match not found" });
+    }
+    res.status(200).json(match);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // Delete a match by ID
-// exports.deleteMatch = async (req, res) => {
-//   try {
-//     const match = await Match.findByIdAndDelete(req.params.id);
-//     if (!match) {
-//       return res.status(404).json({ message: "Match not found" });
-//     }
-//     res.status(200).json({ message: "Match deleted successfully" });
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
+exports.deleteMatch = async (req, res) => {
+  try {
+    const match = await Match.findByIdAndDelete(req.params.id);
+    if (!match) {
+      return res.status(404).json({ message: "Match not found" });
+    }
+    res.status(200).json({ message: "Match deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
