@@ -10,10 +10,10 @@ const leagueSchema =  mongoose.Schema({
     type: String,
     required: true,
   },
-  userId: {
+  userId:[{
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
-  },
+  }],
   
   status: {
     type: Number,

@@ -11,7 +11,8 @@ const sponsorSchema = mongoose.Schema({
     type: String,
   },
   status: {
-    type: Boolean,
+    type: Number,
+    default:true,
   },
   created: {
     type: Date,

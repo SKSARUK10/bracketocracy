@@ -1,4 +1,4 @@
-const mongoose = require("../database/connect");
+const mongoose = require("mongoose");
 
 const deviceinformation = mongoose.Schema({
   deviceType: { type: String },

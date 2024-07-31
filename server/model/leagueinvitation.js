@@ -6,7 +6,7 @@ const leagueinvitation = mongoose.Schema({
     required: true,
     
   },
-  userId: { type: mongoose.Schema.Types.ObjectId, //reference to user collection
+  userId:{ type: mongoose.Schema.Types.ObjectId, //reference to user collection
     ref: "users",
     required: true,                               // the id of the user to be added in the league
   },
@@ -15,7 +15,7 @@ const leagueinvitation = mongoose.Schema({
     ref: "users",                         // the id of the user that had invited the user
     required: true,
   },
-  leagueId: {
+  leagueId:{
     type: mongoose.Schema.Types.ObjectId, //reference to league collection
     ref: "leagues",
     required: true,

@@ -7,5 +7,5 @@ const countdownSchema = mongoose.Schema({
   updated: { type: Date, default: Date.now },
 });
 
-const Countdown = mongoose.model("Countdowns", countdownSchema);
+const Countdown = mongoose.model("countdowns", countdownSchema);
 module.exports = Countdown;

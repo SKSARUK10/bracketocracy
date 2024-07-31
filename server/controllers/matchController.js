@@ -15,10 +15,11 @@ exports.createMatch = async (req, res) => {
     const {
       teamOneId,
       teamTwoId,
-      teamOneScore,
-      teamTwoScore,
+      teamOneScore =0,
+      teamTwoScore =0,
+      finalscore,
       decidedWinner,
-      status,
+      status =0,
       roundSlug,
       zoneSlug,
       seasonId,
@@ -78,8 +79,9 @@ exports.createMatch = async (req, res) => {
     const match = new Match({
       teamOneId,
       teamTwoId,
-      teamOneScore: teamOneScore || 0,
-      teamTwoScore: teamTwoScore || 0,
+      teamOneScore,
+      teamTwoScore,
+      finalscore,
       decidedWinner,
       status,
       roundSlug,
@@ -91,7 +93,7 @@ exports.createMatch = async (req, res) => {
     const savedMatch = await match.save();
 
     // Respond with the saved match
-    res.status(201).json(savedMatch);
+    res.status(201).json({message:"match created successfully",savedMatch});
   } catch (error) {
     // Log error details
     console.error("Error occurred while creating match:", error);
@@ -131,3 +133,95 @@ exports.deleteMatch = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+ 
+ 
+
+exports.updateMatch = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { teamOneId,
+      teamTwoId,
+      teamOneScore,
+      teamTwoScore,
+      finalscore,
+      decidedWinner,
+      status,
+      roundSlug,
+      zoneSlug,
+      seasonId,
+      matchNo,
+       
+    } = req.body;
+
+    // Find the match by ID
+    const match = await Match.findById(id);
+    if (!match) {
+      return res.status(404).json({ error: 'Match not found' });
+    }
+
+    // Validate and check existence of related entities
+    if (teamOneId && !(await Team.findById(teamOneId))) {
+      return res.status(404).json({ error: 'Team One not found' });
+    }
+
+    if (teamTwoId && !(await Team.findById(teamTwoId))) {
+      return res.status(404).json({ error: 'Team Two not found' });
+    }
+
+    if (seasonId && !(await Season.findById(seasonId))) {
+      return res.status(404).json({ error: 'Season not found' });
+    }
+
+    if (roundSlug && !(await Round.findById(roundSlug))) {
+      return res.status(404).json({ error: 'Round not found' });
+    }
+
+    if (zoneSlug && !(await Zone.findById(zoneSlug))) {
+      return res.status(404).json({ error: 'Zone not found' });
+    }
+
+    
+    if (teamOneId && teamTwoId && teamOneId === teamTwoId) {
+      return res.status(400).json({ error: 'Team One and Team Two cannot be the same' });
+    }
+
+    // Validate decidedWinner is among the teams
+    if (decidedWinner && (teamOneId && teamTwoId)) {
+      if (![teamOneId, teamTwoId].includes(decidedWinner)) {
+        return res.status(400).json({ error: 'Decided winner must be one of the teams' });
+      }
+    }
+
+    // Perform the update
+    const updatedMatch = await Match.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          teamOneId,
+          teamTwoId,
+           status,
+          finalscore,
+          matchNo,
+          decidedWinner,
+          roundSlug,
+          zoneSlug,
+          seasonId,
+          teamOneScore: teamOneScore || match.teamOneScore, // Preserve existing scores if not updated
+          teamTwoScore: teamTwoScore || match.teamTwoScore, // Preserve existing scores if not updated
+        }
+      },
+      { new: true }
+    );
+
+    // Respond with the updated match
+    res.status(200).json({ message: 'Update done successfully', info: updatedMatch });
+  } catch (err) {
+    // Log error details
+    console.error("Error updating match:", err);
+
+    // Respond with an error message
+    res.status(500).json({ error: err.message });
+  }
+};
+
+ 

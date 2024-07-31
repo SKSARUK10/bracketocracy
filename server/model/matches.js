@@ -11,11 +11,13 @@ const userSchema = mongoose.Schema({
     ref: "teams",
     required: true,
   },
-  team1score: {
+  teamOneScore: {
     type: Number,
+    
   },
-  team2score: {
+  teamTwoScore: {
     type: Number,
+     
   },
   finalscore: {
     type: Number,
@@ -25,7 +27,7 @@ const userSchema = mongoose.Schema({
     ref: "teams",
     required: true,
   },
-  status: Number,
+  status:{type:Number},
   roundSlug: {
     type: String,
   },
