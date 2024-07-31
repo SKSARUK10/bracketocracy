@@ -1,4 +1,4 @@
-const mongoose = require("../database/connect");
+const mongoose = require("mongoose");
 
 const messageSchema = mongoose.Schema({
   leagueId: {

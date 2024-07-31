@@ -7,3 +7,5 @@ router.get("/display", displayall);
 router.get("/display/:id", displaybyId);
 router.delete("/delete/:id", deletesponsor);
 router.put("/update/:id", updatesponsor);
+
+module.exports =router;
